@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Vue TODO</title>
+
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+        crossorigin="anonymous">
+</head>
+<body>
+
+<div id="app" class="container p-2">
+  {{ message }}
+  <ul>
+    <li v-for="(i, index) in items">{{ index }}: {{ i }}</li>
+  </ul>
+
+  <ul>
+    <li v-for="obj in objs">{{ obj.id }} - {{ obj.value }}</li>
+  </ul>
+
+  <ul>
+    <li v-for="(prop, key) in props">{{key}} : {{ prop }}</li>
+  </ul>
+  <h3>I have clicked {{ clicks }} times</h3>
+  <button v-on:click="clickCounter">Click me</button>
+
+  <div v-if="show">Purus aenean hac dictumst consequat himenaeos id integer faucibus blandit pulvinar,
+    donec justo erat eu lobortis vivamus sagittis molestie. Nisi magnis tortor ante torquent
+    imperdiet ligula aliquam tempus etiam et tincidunt, leo nec ad habitasse parturient arcu
+    porttitor ultrices risus. Scelerisque maecenas consectetur inceptos arcu volutpat facilisi
+    quisque suscipit eu ridiculus, pellentesque lacus curabitur viverra nascetur erat vulputate
+    dictumst tempus.</div>
+  <div v-else>Show is {{ show }}</div>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+
+<script>
+const { createApp } = Vue;
+
+createApp({
+  data() {
+      return {
+          message: 'hello world!',
+          items: ['one', 'two', 7],
+          objs: [{id: 1, value: 'some'}, {id: 2, value: 'two'}, {id: 3, value: 'seven'}],
+          props: {id: 2, value: 'two'},
+          show: false,
+          clicks: 0,
+      }
+  },
+    methods: {
+      clickCounter() {
+          this.clicks ++;
+          if (this.clicks > 10) {
+              this.show = true;
+          }
+      }
+    }
+}).mount('#app')
+</script>
+</body>
+</html>
