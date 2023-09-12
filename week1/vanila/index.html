@@ -31,6 +31,7 @@
   console.log(submitButton, input, list);
 
   submitButton.addEventListener('click', addToList);
+  list.addEventListener('click', remove);
 
   function addToList() {
    console.log('Click!', input.value);
@@ -38,13 +39,18 @@
        return;
    }
 
-   let template = `<div><button onclick="(e) => {e.parent.remove()}">remove </button><p>${input.value}</p></div>`;
+   let template = `<div><button>remove </button><p>${input.value}</p></div>`;
    list.innerHTML += template;
    input.value = '';
   }
 
   function remove(e) {
-      console.log(e);
+      console.log(e.target);
+      if (e.target.tagName !== 'BUTTON') {
+          return;
+      }
+
+      e.target.parentNode.remove();
   }
 </script>
 </body>

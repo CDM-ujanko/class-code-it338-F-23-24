@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Title</title>
+</head>
+<body>
+<div id="app" class="container p-2" style="height: 1000px">
+  {{ message }}
+</div>
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+    const {createApp} = Vue;
+
+    createApp({
+        data() {
+            return {
+                message: 'Hello World!'
+            }
+        },
+        beforeCreate() {
+          console.log('Before create got called!', this.message);
+        },
+
+        created() {
+            console.log('Created got called!', this.message);
+        },
+
+        beforeMount() {
+            console.log('beforeMount got called!', this.message);
+        },
+
+        mounted() {
+            console.log('Mounted got called!', this.message);
+            window.addEventListener('scroll', this.scrollEvent);
+        },
+
+        beforeUpdate() {
+            console.log('beforeUpdate got called!', this.message);
+        },
+
+        updated() {
+            console.log('Updated got called!', this.message);
+        },
+
+
+        methods: {
+            scrollEvent() {
+                console.log('scroll');
+            }
+        },
+
+        beforeUnmount() {
+            window.removeEventListener('scroll', this.scrollEvent);
+        }
+    }).mount('#app')
+</script>
+</body>
+</html>
