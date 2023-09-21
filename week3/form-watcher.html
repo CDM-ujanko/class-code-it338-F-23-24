@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>Title</title>
+  <title>Form - Watch</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
         rel="stylesheet"
         integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
@@ -17,7 +17,7 @@
         <div class="col-md-6 mb-3">
           <label for="firstName" class="form-label">First name</label>
           <input type="text" class="form-control" :class="{'is-invalid': !isValidFirstName}"
-                 id="firstName" v-model="firstName">
+                 id="firstName" v-model="form.firstName">
           <div class="invalid-feedback">
             First Name has to have at least two characters.
           </div>
@@ -26,7 +26,7 @@
         <div class="col-md-6 mb-3">
           <label for="lastName" class="form-label">Last name</label>
           <input type="text" class="form-control" :class="{'is-invalid': !isValidLastName}"
-                 id="lastName" v-model="lastName">
+                 id="lastName" v-model="form.lastName">
           <div class="invalid-feedback">
             First Name has to have at least two characters.
           </div>
@@ -35,7 +35,7 @@
         <div class="col-md-6 mb-3">
           <label for="email" class="form-label">Email</label>
           <input type="email" class="form-control" :class="{'is-invalid': !isValidEmail}"
-                 id="email" v-model="email">
+                 id="email" v-model="form.email">
           <div class="invalid-feedback">
             Please enter a valid email.
           </div>
@@ -44,7 +44,7 @@
         <div class="mb-3">
           <label for="occupation" class="form-label">Occupation</label>
           <select id="occupation" class="form-select" :class="{'is-invalid': !isValidOccupation}"
-                  v-model="occupation">
+                  v-model="form.occupation">
             <option disabled value="">Please Select an option</option>
             <option v-for="o in occupations" :key="o" :value="o">{{ o }}</option>
           </select>
@@ -54,8 +54,8 @@
         </div>
 
         <div class="mb-3">
-          <input type="checkbox" class="form-check-input me-2" :class="{'is-invalid': !terms}"
-                 id="terms" v-model="terms">
+          <input type="checkbox" class="form-check-input me-2" :class="{'is-invalid': !form.terms}"
+                 id="terms" v-model="form.terms">
           <label class="form-check-label" for="terms">I accept terms.</label>
           <div class="invalid-feedback">
             Please accept terms.
@@ -71,10 +71,10 @@
     </div>
 
     <aside class="col-4 bg-dark rounded text-white py-3">
-      <p v-if="firstName">First Name: {{ firstName }}</p>
-      <p v-if="lastName">Last Name: {{ lastName }}</p>
-      <p v-if="email">Email: {{ email }}</p>
-      <p v-if="occupation">Occupation: {{occupation }}</p>
+      <p v-if="form.firstName">First Name: {{ form.firstName }}</p>
+      <p v-if="form.lastName">Last Name: {{ form.lastName }}</p>
+      <p v-if="form.email">Email: {{ form.email }}</p>
+      <p v-if="form.occupation">Occupation: {{ form.occupation }}</p>
     </aside>
   </div>
 </div>
@@ -86,38 +86,60 @@
     createApp({
         data() {
             return {
-                firstName: '',
-                lastName: '',
-                occupation: '',
-                email: '',
-                terms: false,
+                // firstName: '',
+                // lastName: '',
+                // occupation: '',
+                // email: '',
+                // terms: false,
+                form: {
+                    firstName: '',
+                    lastName: '',
+                    occupation: '',
+                    email: '',
+                    terms: false,
+                },
                 occupations: ['student', 'prof', 'plumber']
             }
         },
 
-        watch: {},
+        watch: {
+            form: {
+                handler: function (newVal, oldVal) {
+                    console.log('new Val', newVal);
+                    console.log('old Val', oldVal);
+                    console.log(newVal === oldVal)
+                },
+                deep: true
+            },
+
+            'form.firstName': function (newVal, oldVal) {
+                console.log('name new Val', newVal);
+                console.log('name old Val', oldVal);
+            }
+        },
 
 
         computed: {
             isValidFirstName() {
-                return this.firstName && this.firstName.trim().length > 1
+                return this.form.firstName && this.form.firstName.trim().length > 1
             },
 
             isValidLastName() {
-                return this.lastName && this.lastName.trim().length > 1
+                return this.form.lastName && this.form.lastName.trim().length > 1
             },
 
             isValidEmail() {
-                return this.email && this.email.trim().length > 5 && this.email.includes('@');
+                return this.form.email && this.form.email.trim().length > 5
+                    && this.form.email.includes('@');
             },
 
             isValidOccupation() {
-                return this.occupation;
+                return this.form.occupation;
             },
 
             isValid() {
                 return this.isValidFirstName && this.isValidLastName &&
-                    this.isValidEmail && this.isValidOccupation && this.terms;
+                    this.isValidEmail && this.isValidOccupation && this.form.terms;
             }
         },
 
@@ -126,7 +148,7 @@
             onSubmit(e) {
                 e.preventDefault();
                 if (this.isValid) {
-                  console.log('All good!');
+                    console.log('All good!');
                 } else {
                     console.log('try again!');
                 }
