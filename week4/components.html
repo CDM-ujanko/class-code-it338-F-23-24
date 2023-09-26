@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Components: props</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+        crossorigin="anonymous">
+</head>
+<body>
+<div id="app" class="container p-2">
+  {{ message }}
+  <input type="text" class="form-control" v-model="message">
+  <component-with-props v-bind:name="message" v-model="message" v-on:custom-event="customEventHandler"></component-with-props>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+    const {createApp} = Vue;
+
+    let app = createApp({
+        data() {
+            return {
+                message: 'Hello World!',
+            }
+        },
+        methods: {
+            customEventHandler(payload) {
+                this.message = payload;
+                console.log('the parent handler got called with', payload);
+            }
+        }
+    });
+
+    app.component('component-with-props', {
+        template: `Child ---- <br>
+        <div class="form-control">
+          <label for="modelValue" class="form-label">Model Value</label>
+          <input type="text" class="form-control" id="modelValue" :value="modelValue" @input="onInput">
+        </div>
+        <div class="form-control">
+          <label for="name" class="form-label">Message (Name prop) </label>
+          <input type="text" class="form-control" id="name" v-model="name">
+        </div>
+
+        <div>Name passed from parent: {{ name }}</div>
+        <div>Model Value passed from parent: {{ modelValue }}</div>`,
+        props: {
+            name: String,
+            modelValue: String,
+        },
+
+        mounted() {
+          setTimeout(() => {
+              console.log('timeout called emitting event');
+              this.$emit('customEvent', 'myPayload');
+          }, 5000)
+        },
+        methods: {
+            onInput(e) {
+                console.log('emitting', e.target.value);
+                this.$emit('update:modelValue', 'The new value!');
+            }
+        }
+    });
+
+
+    app.mount('#app');
+</script>
+</body>
+</html>
