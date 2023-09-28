@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Components</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css"
+        rel="stylesheet"
+        integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9"
+        crossorigin="anonymous">
+</head>
+<body>
+<div id="app" class="container p-2">
+  <div class="mb-3" @click="onDivClick">
+    <button class="btn btn-primary" @click="onButtonClick"> Click me</button>
+    <button class="btn btn-primary" @click.stop="onButtonClick"> Click me 2</button>
+    <a href="/" @click.prevent.stop="onButtonClick">Click me</a>
+  </div>
+
+  <my-first-component @my-custom-event="myCustomEventHandler"></my-first-component>
+</div>
+
+<script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+<script>
+    const {createApp} = Vue;
+
+    let app = createApp({
+        data() {
+            return {}
+        },
+
+        methods: {
+            onButtonClick(e) {
+                console.log('button click', e.target);
+            },
+
+            // onButtonClick2(e) {
+            //     e.stopPropagation();
+            //     console.log('button click 2', e.target);
+            // },
+
+            onDivClick(e) {
+                console.log('div click', e.target);
+            },
+
+            myCustomEventHandler(payload) {
+              console.log('the parent saw', payload);
+            }
+        }
+
+    });
+
+    app.component('my-first-component', {
+        template: `<h2>Hello World from my first component!
+          <a href="/" @click.prevent="onClick">Click me I am awesome!</a>
+        </h2>
+        `,
+        methods: {
+            onClick(e) {
+                console.log('Click in the my first component', e);
+                this.$emit('myCustomEvent', {prop1: 'value 1', prop2: 'value 2', originalEvent: e })
+            }
+        }
+    });
+
+
+    app.mount('#app');
+</script>
+</body>
+</html>

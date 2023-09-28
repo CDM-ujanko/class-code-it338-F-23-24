@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Scope</title>
+</head>
+<body>
+
+<script>
+    "use strict";
+
+    function fun1() {
+      if (true) {
+          let x = 1;
+      }
+
+      // console.log(x);
+  }
+
+  fun1();
+
+  // for (let i = 0; i < 10; i++) {
+  //     console.log('in the loop', i);
+  // }
+
+
+  // console.log('after the loop', i);
+
+  console.log(this);
+
+    function fun2() {
+        console.log('this in fun 2', this);
+    }
+
+    fun2()
+
+
+    let fun3 = () => {
+        console.log('this in fun 3', this);
+    }
+
+    fun3();
+
+    [].forEach(function () {});
+
+
+</script>
+</body>
+</html>
