@@ -6,15 +6,16 @@ db.run(`CREATE TABLE IF NOT EXISTS students(
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT(1000) NOT NULL,
     email TEXT(1000) NOT NULL,
-    description TEXT(5000) NOT NULL
+    description TEXT(5000) NOT NULL,
+    photo TEXT(2000) NOT NULL
 )`)
 
 export class StudentSqlStore {
     async create(student) {
        return new Promise((resolve, reject) => {
            db.run(
-               `INSERT INTO students(name, email, description) VALUES (?, ?, ?)`,
-               [student.name, student.email, student.description],
+               `INSERT INTO students(name, email, description, photo) VALUES (?, ?, ?, ?)`,
+               [student.name, student.email, student.description, student.photo],
                function (err, row) {
                    if (err) {
                        return reject(err);

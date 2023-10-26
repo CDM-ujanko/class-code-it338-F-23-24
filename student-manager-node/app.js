@@ -1,5 +1,7 @@
 import 'dotenv/config'
 import express from 'express';
+import multer from 'multer';
+import * as path from 'path'
 // import data from './models/data.js'
 import { StudentSqlStore } from './models/StudentSqlStore.js';
 
@@ -17,8 +19,21 @@ app.use(function (req, res, next) {
     next();
 });
 
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'upload/')
+    },
+     filename: function (req, file, cb) {
+        cb(null, Date.now() + path.extname(file.originalname))
+     }
+})
+
+const upload = multer({ storage: storage});
+
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
+
+app.use('/photos/', express.static('upload'))
 
 app.get('/', (req, res) => {
     res.json({key : [1 , 'seven']});
@@ -31,9 +46,11 @@ app.get('/students', async (req, res) => {
 /**
  * Create
  */
-app.post('/student', async (req, res) => {
+app.post('/student', upload.single('photo'), async (req, res) => {
     let student = req.body;
     console.log(student);
+    console.log(req.file);
+    student.photo = '/photos/' + req.file.filename;
     res.json(await store.create(student));
 })
 

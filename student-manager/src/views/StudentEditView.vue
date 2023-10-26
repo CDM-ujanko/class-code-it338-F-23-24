@@ -17,6 +17,11 @@
         <textarea v-model="student.description" aria-label="With textarea" class="form-control" required></textarea>
       </div>
 
+      <div v-if="!editMode" class="mb-3">
+        <label class="form-label" for="email">Photo</label>
+        <input id="photo" @input="onFileUpload" class="form-control" required type="file" accept="image/png, image/jpeg">
+      </div>
+
       <button class="btn btn-primary my-3" type="submit">{{ editMode ? 'Update' : 'Create' }}</button>
     </form>
   </div>
@@ -34,7 +39,8 @@ export default {
         name: '',
         email: '',
         description: ''
-      }
+      },
+      file: null
     }
   },
 
@@ -65,7 +71,18 @@ export default {
               console.error(err);
             })
       } else {
-        axios.post(`${process.env.VUE_APP_API_BASE}/student`, this.student)
+        let formData = new FormData();
+        formData.append('name', this.student.name);
+        formData.append('email', this.student.email);
+        formData.append('description', this.student.description);
+        formData.append('photo', this.file);
+
+        axios({
+          method: 'POST',
+          url: `${process.env.VUE_APP_API_BASE}/student`,
+          data: formData,
+          headers: { "Content-Type": "multipart/form-data" },
+        })
             .then(res => {
               console.log(res);
               let id = res.data;
@@ -76,6 +93,11 @@ export default {
               console.error(err);
             })
       }
+    },
+
+    onFileUpload(e) {
+      this.file = e.target.files[0]
+      console.log(this.file);
     }
   }
 }

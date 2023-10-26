@@ -2,6 +2,7 @@
   <div>
     <div v-if="student" class="card" style="max-width: 18rem">
       <div class="card-body">
+        <img :src="apiBase + student.photo" alt="photo" class="card-img-top">
         <h5 class="card-title">{{ student.name }}</h5>
         <p class="card-text">{{ student.email }}</p>
         <router-link :to="`/student/${$route.params.id}/edit`" class="btn btn-primary">Edit</router-link>
@@ -20,6 +21,7 @@ export default {
   name: "StudentView",
   data() {
     return {
+      apiBase: process.env.VUE_APP_API_BASE,
       student: {}
     }
   },
