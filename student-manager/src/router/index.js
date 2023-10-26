@@ -23,6 +23,10 @@ const routes = [
         component: StudentView
     },
     {
+        path: '/student/:id/edit',
+        component: StudentEditView
+    },
+    {
         path: '/:pathMatch(.*)',
         component: ErrorView
     }

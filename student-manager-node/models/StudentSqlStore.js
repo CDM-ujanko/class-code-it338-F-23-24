@@ -40,12 +40,34 @@ export class StudentSqlStore {
         })
     }
 
-    async update() {
+    async update(student) {
+        return new Promise((resolve, reject) => {
+            db.run(
+                `UPDATE students SET name = ?, email = ?, description = ? WHERE id = ?`,
+                [student.name, student.email, student.description, student.id],
+                function (err, row) {
+                    if (err) {
+                        return reject(err);
+                    }
 
+                    return resolve(this.lastID);
+                })
+        })
     }
 
-    async delete() {
+    async delete(id) {
+        return new Promise((resolve, reject) => {
+            db.run(
+                `DELETE FROM students WHERE id = ?`,
+                id,
+                function (err, row) {
+                    if (err) {
+                        return reject(err);
+                    }
 
+                    return resolve(row);
+                })
+        })
     }
 
     async list() {

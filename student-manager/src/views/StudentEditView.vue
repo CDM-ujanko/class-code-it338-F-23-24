@@ -17,10 +17,8 @@
         <textarea v-model="student.description" aria-label="With textarea" class="form-control" required></textarea>
       </div>
 
-      <button class="btn btn-primary" type="submit">Create</button>
+      <button class="btn btn-primary my-3" type="submit">{{ editMode ? 'Update' : 'Create' }}</button>
     </form>
-    {{ student }}
-
   </div>
 </template>
 
@@ -31,6 +29,7 @@ export default {
   name: "StudentEditView",
   data() {
     return {
+      editMode: !!this.$route.params.id,
       student: {
         name: '',
         email: '',
@@ -39,20 +38,44 @@ export default {
     }
   },
 
-  mounted() {},
-
-  methods: {
-    onSubmit() {
-      axios.post(`${process.env.VUE_APP_API_BASE}/student`, this.student)
+  mounted() {
+    if (this.editMode) {
+      axios.get(`${process.env.VUE_APP_API_BASE}/student/${this.$route.params.id}`)
           .then(res => {
             console.log(res);
-            let id = res.data;
-            this.$router.push(`/student/${id}`);
+            this.student = res.data;
           })
           .catch(err => {
             // error
             console.error(err);
           })
+    }
+  },
+
+  methods: {
+    onSubmit() {
+      if (this.editMode) {
+        axios.put(`${process.env.VUE_APP_API_BASE}/student/${this.$route.params.id}`, this.student)
+            .then((res) => {
+              console.log(res);
+              this.$router.push(`/student/${this.$route.params.id}`);
+            })
+            .catch(err => {
+              // error
+              console.error(err);
+            })
+      } else {
+        axios.post(`${process.env.VUE_APP_API_BASE}/student`, this.student)
+            .then(res => {
+              console.log(res);
+              let id = res.data;
+              this.$router.push(`/student/${id}`);
+            })
+            .catch(err => {
+              // error
+              console.error(err);
+            })
+      }
     }
   }
 }

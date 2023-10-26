@@ -24,24 +24,42 @@ app.get('/', (req, res) => {
     res.json({key : [1 , 'seven']});
 });
 
-app.get('/student/:id', async (req, res) => {
-    res.json(await store.read(req.params.id));
-});
-
 app.get('/students', async (req, res) => {
     res.json(await store.list());
 });
 
+/**
+ * Create
+ */
 app.post('/student', async (req, res) => {
     let student = req.body;
     console.log(student);
     res.json(await store.create(student));
 })
 
-// Create
-// Read
-// Update
-// Delete
+/**
+ * Read
+ */
+app.get('/student/:id', async (req, res) => {
+    res.json(await store.read(req.params.id));
+});
+
+/**
+ * Update
+ */
+app.put('/student/:id', async (req, res) => {
+    let student = req.body;
+    student.id = req.params.id;
+    console.log(student);
+    res.json(await store.update(student));
+})
+
+/**
+ * Delete
+ */
+app.delete('/student/:id', async (req, res) => {
+    res.json(await store.delete(req.params.id));
+});
 
 app.listen(process.env.PORT, () => {
     console.log(`App is running on port ${process.env.PORT}`)
