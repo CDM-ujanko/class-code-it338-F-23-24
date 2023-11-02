@@ -55,7 +55,7 @@ app.get('/students', async (req, res) => {
 /**
  * Create
  */
-app.post('/student', upload.single('photo'), async (req, res) => {
+app.post('/student', [passport.authenticate('jwt', {session: false}), upload.single('photo')], async (req, res) => {
     let student = req.body;
     console.log(student);
     console.log(req.file);
@@ -73,7 +73,7 @@ app.get('/student/:id', async (req, res) => {
 /**
  * Update
  */
-app.put('/student/:id', async (req, res) => {
+app.put('/student/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
     let student = req.body;
     student.id = req.params.id;
     console.log(student);
@@ -83,7 +83,7 @@ app.put('/student/:id', async (req, res) => {
 /**
  * Delete
  */
-app.delete('/student/:id', async (req, res) => {
+app.delete('/student/:id', passport.authenticate('jwt', {session: false}), async (req, res) => {
     res.json(await store.delete(req.params.id));
 });
 

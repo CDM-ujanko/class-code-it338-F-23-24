@@ -29,6 +29,7 @@
 
 <script>
 import axios from "axios";
+import {mapGetters} from "vuex";
 
 export default {
   name: "StudentEditView",
@@ -45,6 +46,10 @@ export default {
   },
 
   mounted() {
+    if (!this.isLoggedIn) {
+      this.$router.push('/')
+    }
+
     if (this.editMode) {
       axios.get(`${process.env.VUE_APP_API_BASE}/student/${this.$route.params.id}`)
           .then(res => {
@@ -57,6 +62,13 @@ export default {
           })
     }
   },
+
+  computed: {
+    ...mapGetters([
+      'isLoggedIn'
+    ])
+  },
+
 
   methods: {
     onSubmit() {

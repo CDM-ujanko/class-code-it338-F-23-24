@@ -1,5 +1,7 @@
 <template>
-About us page!
+  <div>
+    About us page!
+  </div>
 </template>
 
 <script>

@@ -29,6 +29,9 @@ const routes = [
     {
         path: '/:pathMatch(.*)',
         component: ErrorView
+    }, {
+        path: '/login',
+        component: () => import(/* webpackChunkName: "login" */ '@/views/LoginView.vue')
     }
 ]
 

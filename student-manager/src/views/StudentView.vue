@@ -3,19 +3,20 @@
     <div v-if="student" class="card" style="max-width: 18rem">
       <div class="card-body">
         <img :src="apiBase + student.photo" alt="photo" class="card-img-top">
-        <h5 class="card-title">{{ student.name }}</h5>
+        <h5 class="card-title mt-2">{{ student.name }}</h5>
         <p class="card-text">{{ student.email }}</p>
-        <router-link :to="`/student/${$route.params.id}/edit`" class="btn btn-primary">Edit</router-link>
-        <button class="btn btn-danger mx-3" @click="deleteStudent">Delete</button>
-
+        <template v-if="isLoggedIn">
+          <router-link :to="`/student/${$route.params.id}/edit`" class="btn btn-primary">Edit</router-link>
+          <button class="btn btn-danger mx-3" @click="deleteStudent">Delete</button>
+        </template>
       </div>
-
     </div>
   </div>
 </template>
 
 <script>
 import axios from "axios";
+import { mapGetters } from 'vuex'
 
 export default {
   name: "StudentView",
@@ -37,6 +38,12 @@ export default {
           console.error(err);
           this.$router.push('/404');
         })
+  },
+
+  computed: {
+    ...mapGetters([
+        'isLoggedIn'
+    ])
   },
 
   methods: {
